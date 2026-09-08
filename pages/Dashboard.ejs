@@ -1,15 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IWOS Field - Telemetry Dashboard</title>
+  <link rel="stylesheet" href="/css.css" />
+</head>
+<body>
 
-<%- include('../partials/header', { 
-  pageTitle: 'Telemetry Dashboard', 
-  pageSubtitle: 'Solar race telemetry link: IWOS-07 sensor station', 
-  activePage: 'dashboard' 
-}) %>
+  
+  <%- include('../partials/header', { activePage: 'dashboard' }) %>
 
+ 
+  <div class="app-main-layout">
+    
+   
 
-<p>Dashboard</p>
+    <main class="page-container">
 
-<%- include('../partials/footer') %>
+      
+      <section class="telemetry-section">
+        <h3 class="section-title">TELEMETRY FEED</h3>
 
+        <% 
+          // Default fallback data if Express route has not fetched from DB yet
+          const feeds = (typeof telemetry !== 'undefined' && telemetry.feeds) ? telemetry.feeds : [
+            { label: 'Irradiance', val: 1042, unit: 'W/m²', color: 'val-amber', icon: 'sun' },
+            { label: 'Atmos', val: '32.4', unit: '°C / 42%', color: 'val-blue', icon: 'thermometer' },
+            { label: 'Wind', val: '18.4', unit: 'km/h', color: 'val-cyan', icon: 'wind' },
+            { label: 'Rainfall', val: '0.0', unit: 'mm/h', color: 'val-red', icon: 'droplet' }
+          ];
+        %>
 
+        <div class="telemetry-cards-row">
+          <% feeds.forEach(card => { %>
+            <article class="feed-card">
+              <div class="card-header">
+                <div class="card-label">
+                  <span class="status-dot-green"></span>
+                  <span><%= card.label %></span>
+                </div>
 
+                <% if (card.icon === 'sun') { %>
+                  <svg class="card-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="4"></circle>
+                    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+                  </svg>
+                <% } else if (card.icon === 'thermometer') { %>
+                  <svg class="card-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path>
+                  </svg>
+                <% } else if (card.icon === 'wind') { %>
+                  <svg class="card-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"></path>
+                  </svg>
+                <% } else { %>
+                  <svg class="card-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+                  </svg>
+                <% } %>
+              </div>
 
+              <div class="card-metric">
+                <span class="val <%= card.color %>"><%= card.val %></span>
+                <span class="unit"><%- card.unit %></span>
+              </div>
+            </article>
+          <% }) %>
+        </div>
+      </section>
+
+      <!-- Section 2: Vehicle Dynamics & Track Position -->
+      <section class="telemetry-section">
+        <h3 class="section-title">VEHICLE DYNAMICS &amp; TRACK POSITION</h3>
+
+        <%
+          const speed = (typeof dynamics !== 'undefined' && dynamics.speed) ? dynamics.speed : 92;
+          const logToday = (typeof dynamics !== 'undefined' && dynamics.logToday) ? dynamics.logToday : 142.8;
+          const latitude = (typeof dynamics !== 'undefined' && dynamics.lat) ? dynamics.lat : '34.0522° N';
+          const longitude = (typeof dynamics !== 'undefined' && dynamics.lng) ? dynamics.lng : '118.2437° W';
+        %>
+
+        <div class="dynamics-panel">
+          <div class="dynamics-info-side">
+            <div class="stats-pair">
+              <div class="stat-col">
+                <span class="stat-tag">CURRENT SPEED</span>
+                <div class="stat-data">
+                  <span class="stat-num"><%= speed %></span>
+                  <span class="unit">km/h</span>
+                </div>
+              </div>
+              <div class="stat-col">
+                <span class="stat-tag">LOG TODAY</span>
+                <div class="stat-data">
+                  <span class="stat-num"><%= logToday %></span>
+                  <span class="unit">km</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="gps-coordinates">
+              <svg class="pin-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              <span><%= latitude %>, <%= longitude %></span>
+            </div>
+          </div>
+
+          <div class="dynamics-divider"></div>
+
+          <div class="dynamics-map-side">
+            <div class="track-canvas-container">
+              <svg class="track-svg" viewBox="0 0 700 240" preserveAspectRatio="xMidYMid meet">
+                <defs>
+                  <linearGradient id="routeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#00e5ff" />
+                    <stop offset="25%" stop-color="#00e599" />
+                    <stop offset="55%" stop-color="#ff9900" />
+                    <stop offset="80%" stop-color="#ff3366" />
+                    <stop offset="100%" stop-color="#a855f7" />
+                  </linearGradient>
+                </defs>
+
+               
+                <path d="M20,180 Q150,140 280,190 T540,160 T690,140" fill="none" stroke="#141a23" stroke-width="1.2" />
+                <path d="M50,130 Q200,90 350,150 T620,110" fill="none" stroke="#151b25" stroke-width="1" />
+                <path d="M0,70 Q180,40 360,90 T680,60" fill="none" stroke="#141a23" stroke-width="1.2" />
+
+                
+                <path 
+                  d="M70,35 C110,35 120,60 150,65 C180,70 190,95 230,105 C270,115 280,145 320,130 C360,115 375,75 420,80 C465,85 470,145 510,160 C550,175 580,140 620,170" 
+                  fill="none" 
+                  stroke="url(#routeGradient)" 
+                  stroke-width="5" 
+                  opacity="0.3"
+                />
+
+                <path 
+                  d="M70,35 C110,35 120,60 150,65 C180,70 190,95 230,105 C270,115 280,145 320,130 C360,115 375,75 420,80 C465,85 470,145 510,160 C550,175 580,140 620,170" 
+                  fill="none" 
+                  stroke="url(#routeGradient)" 
+                  stroke-width="3" 
+                />
+
+                <circle cx="620" cy="170" r="4" fill="#00e5ff" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <%- include('../partials/footer') %>
+</body>
+</html>
