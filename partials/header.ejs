@@ -1,0 +1,78 @@
+<link rel="stylesheet" href="/css.css" />
+
+
+<header class="iwos-topbar">
+  <button type="button" id="menuToggle" class="nav-btn" aria-label="Open Navigation">
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+  </button>
+
+  <div class="topbar-title-group">
+    <div class="brand-badge-row">
+      <span class="brand-square"></span>
+      <span class="badge-text">IWOS FIELD</span>
+    </div>
+    <h1 class="topbar-title">
+      <%= typeof pageTitle !== 'undefined' ? pageTitle : 'Telemetry Dashboard' %>
+    </h1>
+  </div>
+</header>
+
+<div id="drawerOverlay" class="drawer-overlay"></div>
+
+
+<aside id="sidebarDrawer" class="sidebar-drawer">
+  <div class="drawer-header">
+    <div class="brand-badge-row">
+      <span class="brand-square"></span>
+      <span class="badge-text">IWOS FIELD</span>
+    </div>
+    <button type="button" id="closeDrawer" class="close-btn" aria-label="Close Navigation">&times;</button>
+  </div>
+
+  <nav class="sidebar-nav" aria-label="Main Navigation">
+    <a 
+      href="/dashboard" 
+      class="nav-link <%= (typeof activePage !== 'undefined' && activePage === 'dashboard') ? 'active' : '' %>"
+    >
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M3 3h7v7H3V3zm11 0h7v7h-7V3zm-11 11h7v7H3v-7zm11 0h7v7h-7v-7z"/>
+      </svg>
+      <span>Live Status</span>
+    </a>
+
+    <a 
+      href="/sync-sessions" 
+      class="nav-link <%= (typeof activePage !== 'undefined' && activePage === 'sync') ? 'active' : '' %>"
+    >
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3"/>
+      </svg>
+      <span>Sync &amp; Logs</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer-card">
+    <div class="card-top-row">
+      <div class="vehicle-identity">
+        <strong class="vehicle-code">IWOS-07</strong>
+        <span class="lead-pill">LEAD</span>
+      </div>
+      <div class="battery-metric">
+        <svg class="battery-icon" viewBox="0 0 24 24" fill="none" stroke="#00e599" stroke-width="2">
+          <rect x="2" y="7" width="16" height="10" rx="2" ry="2"></rect>
+          <line x1="22" y1="11" x2="22" y2="13"></line>
+        </svg>
+        <span class="battery-value">87%</span>
+      </div>
+    </div>
+    
+    <div class="status-divider"></div>
+
+    <div class="card-bottom-row">
+      <span class="pulse-dot"></span>
+      <span class="status-label">Operating Normal</span>
+    </div>
+  </div>
+</aside>
