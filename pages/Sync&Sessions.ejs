@@ -1,9 +1,201 @@
-<%- include('../partials/header', { 
-  pageTitle: 'Telemetry Dashboard', 
-  pageSubtitle: 'Solar race telemetry link: IWOS-07 sensor station', 
-  activePage: 'dashboard' 
-}) %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IWOS Field - Sync &amp; Sessions</title>
+  <link rel="stylesheet" href="/css.css" />
+</head>
+<body>
 
-<p>Sync and sessions</p>
 
-<%- include('../partials/footer') %>
+  <%- include('../partials/header', { activePage: 'sync' }) %>
+
+ 
+  <div class="app-main-layout">
+    
+    
+    
+
+    <main class="page-container">
+
+      <%
+        const syncMetrics = (typeof metrics !== 'undefined') ? metrics : {
+          pendingPackets: 124,
+          bufferCapacity: '82%',
+          avgLatency: '42ms',
+          uplinkRate: '1.4 MB/s'
+        };
+
+        const sessionLogs = (typeof sessions !== 'undefined') ? sessions : [
+          {
+            sessionId: 'SES-9821',
+            driverName: 'K. Ndlovu',
+            segment: 'Stage 2 - Sector B',
+            duration: '01h 42m',
+            packetsSent: 18450,
+            status: 'Active',
+            statusClass: 'status-active'
+          },
+          {
+            sessionId: 'SES-9820',
+            driverName: 'M. Pretorius',
+            segment: 'Stage 1 - Sector A',
+            duration: '02h 15m',
+            packetsSent: 24810,
+            status: 'Synced',
+            statusClass: 'status-synced'
+          },
+          {
+            sessionId: 'SES-9819',
+            driverName: 'Telemetry Buffer Flush',
+            segment: 'Depot Pit Lane',
+            duration: '00h 18m',
+            packetsSent: 3420,
+            status: 'Completed',
+            statusClass: 'status-completed'
+          },
+          {
+            sessionId: 'SES-9818',
+            driverName: 'Calibration Run',
+            segment: 'Proving Ground Loop',
+            duration: '00h 45m',
+            packetsSent: 8900,
+            status: 'Completed',
+            statusClass: 'status-completed'
+          }
+        ];
+      %>
+
+      
+      <section class="telemetry-section">
+        <h3 class="section-title">BUFFER &amp; TRANSMISSION HEALTH</h3>
+
+        <div class="telemetry-cards-row">
+          <article class="feed-card">
+            <div class="card-header">
+              <div class="card-label">
+                <span class="status-dot-green"></span>
+                <span>Queue Backlog</span>
+              </div>
+              <svg class="card-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              </svg>
+            </div>
+            <div class="card-metric">
+              <span class="val val-amber"><%= syncMetrics.pendingPackets %></span>
+              <span class="unit">pkts</span>
+            </div>
+          </article>
+
+          <article class="feed-card">
+            <div class="card-header">
+              <div class="card-label">
+                <span class="status-dot-green"></span>
+                <span>Buffer Pool</span>
+              </div>
+              <svg class="card-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+                <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+                <line x1="6" y1="6" x2="6.01" y2="6"></line>
+                <line x1="6" y1="18" x2="6.01" y2="18"></line>
+              </svg>
+            </div>
+            <div class="card-metric">
+              <span class="val val-blue"><%= syncMetrics.bufferCapacity %></span>
+              <span class="unit">used</span>
+            </div>
+          </article>
+
+          <article class="feed-card">
+            <div class="card-header">
+              <div class="card-label">
+                <span class="status-dot-green"></span>
+                <span>Uplink Speed</span>
+              </div>
+              <svg class="card-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="16 16 12 12 8 16"></polyline>
+                <line x1="12" y1="12" x2="12" y2="21"></line>
+                <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path>
+              </svg>
+            </div>
+            <div class="card-metric">
+              <span class="val val-cyan"><%= syncMetrics.uplinkRate.split(' ')[0] %></span>
+              <span class="unit"><%= syncMetrics.uplinkRate.split(' ')[1] || 'MB/s' %></span>
+            </div>
+          </article>
+
+          <article class="feed-card">
+            <div class="card-header">
+              <div class="card-label">
+                <span class="status-dot-green"></span>
+                <span>LTE Latency</span>
+              </div>
+              <svg class="card-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <div class="card-metric">
+              <span class="val val-green"><%= syncMetrics.avgLatency %></span>
+              <span class="unit">RTT</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+     
+      <section class="telemetry-section">
+        <div class="table-section-header">
+          <h3 class="section-title">TELEMETRY SESSIONS &amp; LOG HISTORY</h3>
+          <div class="table-actions">
+            <button type="button" class="btn btn-secondary btn-sm">Export CSV</button>
+            <button type="button" class="btn btn-secondary btn-sm">Flush Buffer</button>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="iwos-table">
+            <thead>
+              <tr>
+                <th>SESSION ID</th>
+                <th>OPERATOR / DRIVER</th>
+                <th>TRACK SEGMENT</th>
+                <th>DURATION</th>
+                <th>PACKETS LOGGED</th>
+                <th>STATUS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (sessionLogs && sessionLogs.length > 0) { %>
+                <% sessionLogs.forEach(session => { %>
+                  <tr>
+                    <td><strong class="session-id-tag"><%= session.sessionId %></strong></td>
+                    <td class="text-light"><%= session.driverName %></td>
+                    <td><%= session.segment %></td>
+                    <td class="text-mono"><%= session.duration %></td>
+                    <td class="text-mono"><%= Number(session.packetsSent).toLocaleString() %></td>
+                    <td>
+                      <span class="status-badge <%= session.statusClass %>">
+                        <%= session.status %>
+                      </span>
+                    </td>
+                  </tr>
+                <% }) %>
+              <% } else { %>
+                <tr>
+                  <td colspan="6" class="table-empty">No active or archived telemetry sessions found.</td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  
+  <%- include('../partials/footer') %>
+</body>
+</html>

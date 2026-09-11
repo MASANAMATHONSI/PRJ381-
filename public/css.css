@@ -694,3 +694,120 @@ body {
     height: 100%;
     display: block;
   }
+  /* ==========================================================================
+   Sync & Sessions Table & Controls
+   ========================================================================== */
+
+.val-green {
+  color: #00e599;
+}
+
+.table-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.table-section-header .section-title {
+  margin-bottom: 0;
+}
+
+.table-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-sm {
+  padding: 0.4rem 0.85rem;
+  font-size: 0.78rem;
+}
+
+.table-container {
+  background-color: #0e1218;
+  border: 1px solid #1c2430;
+  border-radius: 12px;
+  overflow-x: auto;
+}
+
+.iwos-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.88rem;
+}
+
+.iwos-table th {
+  background-color: #12171f;
+  color: #7f93a8;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #1c2430;
+  text-transform: uppercase;
+}
+
+.iwos-table td {
+  padding: 1.1rem 1.25rem;
+  border-bottom: 1px solid #161d26;
+  color: #94a3b8;
+}
+
+.iwos-table tr:last-child td {
+  border-bottom: none;
+}
+
+.iwos-table tr:hover td {
+  background-color: #111620;
+}
+
+.session-id-tag {
+  color: #ffffff;
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+.text-light {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.text-mono {
+  font-family: monospace;
+  color: #cbd5e1;
+}
+
+.table-empty {
+  text-align: center;
+  padding: 2.5rem !important;
+  color: #64748b;
+}
+
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.status-active {
+  background-color: rgba(0, 229, 153, 0.12);
+  color: #00e599;
+  border: 1px solid rgba(0, 229, 153, 0.3);
+}
+
+.status-synced {
+  background-color: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.status-completed {
+  background-color: rgba(148, 163, 184, 0.1);
+  color: #94a3b8;
+  border: 1px solid #28313e;
+}
