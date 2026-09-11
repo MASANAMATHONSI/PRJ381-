@@ -10,20 +10,8 @@ app.set('views',__dirname);
 
 app.use(express.static(path.join(__dirname,'public')));
 
-//This is the routs I will be put them in a seperate folder at a later stage
-
-app.get('/', (req, res) => {
-  res.redirect('/dashboard');
-});
-
-app.get('/dashboard', (req, res) => {
-  res.render('pages/Dashboard');
-});
-
-
-app.get('/sync-sessions', (req, res) => {
-  res.render('pages/Sync&Sessions');
-});
+const telemetryRouter=require('./routers/telemetryRouter');
+app.use('/',telemetryRouter)
 //starting the server
 app.listen(PORT,()=>{
     console.log(`The server is currently running on  http://localhost:`+PORT)
