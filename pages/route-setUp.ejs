@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= typeof pageTitle !== 'undefined' ? pageTitle : 'Route Navigation - IWOS' %></title>
+  
+  <!-- Leaflet Interactive Map CSS (Free, Real Maps, No API key needed) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <style>
+  
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body.mobile-body {
+      background-color: #0e1218;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0;
+    }
+
+    .map-screen-wrapper {
+      width: 100%;
+      max-width: 420px;
+      height: 100vh;
+      max-height: 850px;
+      background-color: #0e1218;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      border-radius: 16px;
+      border: 1px solid #1c2432;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    /* Top Floating Overlay */
+    .map-top-overlay {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: auto;
+    }
+
+    .map-back-btn {
+      width: 40px;
+      height: 40px;
+      background-color: rgba(18, 23, 32, 0.85);
+      border: 1px solid #232d3d;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      text-decoration: none;
+      backdrop-filter: blur(8px);
+    }
+
+    .telemetry-pill-mini {
+      background-color: rgba(18, 23, 32, 0.85);
+      border: 1px solid #232d3d;
+      border-radius: 20px;
+      padding: 6px 12px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #8b98a9;
+      backdrop-filter: blur(8px);
+    }
+
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background-color: #00e599;
+      box-shadow: 0 0 8px rgba(0, 229, 153, 0.8);
+    }
+
+    /* Real Map Canvas */
+    .map-viewport {
+      width: 100%;
+      height: 320px;
+      min-height: 320px;
+      position: relative;
+      background-color: #0c1016;
+      z-index: 1;
+    }
+
+    #map {
+      width: 100%;
+      height: 100%;
+      background: #0c1016;
+    }
+
+    /* Invert Leaflet tiles into high-tech dark mode */
+    .leaflet-tile-pane {
+      filter: invert(100%) hue-rotate(180deg) brightness(85%) contrast(90%);
+    }
+
+    /* Bottom Sheet Layout */
+    .bottom-sheet-panel {
+      flex: 1;
+      background-color: #121720;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      border-top: 1px solid #232d3d;
+      padding: 12px 16px 20px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 10;
+      overflow-y: auto;
+    }
+
+    .sheet-drag-handle {
+      width: 36px;
+      height: 4px;
+      background-color: #2b3648;
+      border-radius: 2px;
+      align-self: center;
+      margin-bottom: 2px;
+    }
+
+    /* Location Pill */
+    .location-pill-box {
+      background-color: #0e1218;
+      border: 1px solid #232d3d;
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .location-inner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .location-sublabel {
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: #5c6879;
+      letter-spacing: 0.05em;
+    }
+
+    .location-name {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .sensor-tag {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #00e599;
+    }
+
+    /* Search Box */
+    .destination-search-box {
+      background-color: #0e1218;
+      border: 1.5px solid #232d3d;
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: border-color 0.2s ease;
+    }
+
+    .destination-search-box:focus-within {
+      border-color: #7075f8;
+    }
+
+    .destination-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #ffffff;
+      font-size: 0.92rem;
+    }
+
+    .destination-input::placeholder {
+      color: #5c6879;
+    }
+
+    .clear-search-btn {
+      background: none;
+      border: none;
+      color: #5c6879;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: none;
+      padding: 0 4px;
+    }
+
+    /* Places List */
+    .places-list-block {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .places-section-label {
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: #5c6879;
+      letter-spacing: 0.08em;
+      margin-bottom: 2px;
+    }
+
+    .places-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .place-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      background-color: #0e1218;
+      border: 1px solid #1c2432;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .place-row:hover,
+    .place-row.selected {
+      background-color: #161d27;
+      border-color: #7075f8;
+    }
+
+    .place-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #8b98a9;
+    }
+
+    .place-name {
+      color: #ffffff;
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .place-distance {
+      color: #5c6879;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    /* Fixed SVG Dimensions */
+    svg.loc-icon, svg.place-icon, svg.search-icon {
+      width: 18px !important;
+      height: 18px !important;
+      flex-shrink: 0 !important;
+    }
+
+    /* Action Buttons */
+    .mobile-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      background-color: #5a57f4;
+      color: #ffffff;
+      transition: background-color 0.15s ease, opacity 0.15s ease;
+      margin-top: 4px;
+    }
+
+    .mobile-btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      background-color: #3b3a7d;
+    }
+
+    .skip-action-link {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #7075f8;
+      text-decoration: none;
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    .skip-action-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body class="mobile-body">
+
+  <div class="map-screen-wrapper">
+    <!-- Top Header -->
+    <header class="map-top-overlay">
+      <a href="/dashboard" class="map-back-btn" aria-label="Back to Dashboard">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </a>
+      <div class="telemetry-pill-mini">
+        <span class="pulse-dot"></span>
+        <span>IWOS-07 LIVE GPS</span>
+      </div>
+    </header>
+
+    <!-- Real Interactive Map Viewport -->
+    <div class="map-viewport">
+      <div id="map"></div>
+    </div>
+
+    <!-- Bottom Sheet Panel -->
+    <section class="bottom-sheet-panel">
+      <div class="sheet-drag-handle"></div>
+
+      <!-- Current Location Field -->
+      <div class="location-pill-box">
+        <div class="location-inner">
+          <svg class="loc-icon" viewBox="0 0 24 24" fill="none" stroke="#00e599" stroke-width="2">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          <div>
+            <div class="location-sublabel">START POINT</div>
+            <div class="location-name">Vehicle GPS (-26.15, 28.23)</div>
+          </div>
+        </div>
+        <div class="sensor-tag">
+          <span class="pulse-dot"></span>
+          <span>LOCK</span>
+        </div>
+      </div>
+
+      <!-- Destination Search Box -->
+      <div class="destination-search-box">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="#8b98a9" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input 
+          type="text" 
+          id="destinationInput" 
+          class="destination-input" 
+          placeholder="Where are you heading?" 
+          autocomplete="off"
+        />
+        <button type="button" id="clearSearchBtn" class="clear-search-btn">&times;</button>
+      </div>
+
+      <!-- Saved Places List -->
+      <div class="places-list-block">
+        <span class="places-section-label">SAVED RACE WAYPOINTS</span>
+        <div class="places-list" id="placesList">
+          <div class="place-row" data-name="Kempton Park Hub" data-lat="-26.1325" data-lng="28.2312" tabindex="0">
+            <div class="place-left">
+              <svg class="place-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              <strong class="place-name">Kempton Park Hub</strong>
+            </div>
+            <span class="place-distance">Sector 1</span>
+          </div>
+
+          <div class="place-row" data-name="Pretoria Proving Loop" data-lat="-25.7479" data-lng="28.2293" tabindex="0">
+            <div class="place-left">
+              <svg class="place-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <strong class="place-name">Pretoria Proving Loop</strong>
+            </div>
+            <span class="place-distance">Sector 2</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Button -->
+      <button type="button" id="startTripBtn" class="mobile-btn" disabled>
+        Select Destination to Calculate Route
+      </button>
+      <a href="/dashboard" class="skip-action-link">Skip Route Setup</a>
+    </section>
+  </div>
+
+  <!-- Leaflet Map Engine -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Initialize Map centered on vehicle location
+      const vehicleCoords = [-26.1500, 28.2300];
+      const map = L.map('map', {
+        zoomControl: false,
+        attributionControl: false
+      }).setView(vehicleCoords, 13);
+
+      // Add high-resolution OpenStreetMap tile layer
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19
+      }).addTo(map);
+
+      // Vehicle Pulse Marker
+      const carIcon = L.divIcon({
+        className: 'custom-vehicle-marker',
+        html: `<div style="width: 14px; height: 14px; background: #00e599; border: 2.5px solid #ffffff; border-radius: 50%; box-shadow: 0 0 12px #00e599;"></div>`,
+        iconSize: [14, 14],
+        iconAnchor: [7, 7]
+      });
+
+      L.marker(vehicleCoords, { icon: carIcon }).addTo(map);
+
+      let routePolyline = null;
+      let targetMarker = null;
+
+      const input = document.getElementById('destinationInput');
+      const clearBtn = document.getElementById('clearSearchBtn');
+      const startBtn = document.getElementById('startTripBtn');
+      const placeRows = document.querySelectorAll('.place-row');
+
+      function drawRoute(lat, lng, name) {
+        if (routePolyline) map.removeLayer(routePolyline);
+        if (targetMarker) map.removeLayer(targetMarker);
+
+        // Draw animated telemetry line
+        const latlngs = [
+          vehicleCoords,
+          [(vehicleCoords[0] + lat) / 2 + 0.01, (vehicleCoords[1] + lng) / 2],
+          [lat, lng]
+        ];
+
+        routePolyline = L.polyline(latlngs, {
+          color: '#7075f8',
+          weight: 4,
+          dashArray: '6, 8',
+          opacity: 0.9
+        }).addTo(map);
+
+        targetMarker = L.circleMarker([lat, lng], {
+          radius: 6,
+          color: '#7075f8',
+          fillColor: '#ffffff',
+          fillOpacity: 1
+        }).addTo(map);
+
+        map.fitBounds(routePolyline.getBounds(), { padding: [40, 40] });
+
+        if (startBtn) {
+          startBtn.disabled = false;
+          startBtn.textContent = `Start Trip to ${name}`;
+        }
+      }
+
+      placeRows.forEach(row => {
+        row.addEventListener('click', () => {
+          placeRows.forEach(r => r.classList.remove('selected'));
+          row.classList.add('selected');
+
+          const name = row.dataset.name;
+          const lat = parseFloat(row.dataset.lat);
+          const lng = parseFloat(row.dataset.lng);
+
+          if (input) input.value = name;
+          if (clearBtn) clearBtn.style.display = 'block';
+
+          drawRoute(lat, lng, name);
+        });
+      });
+
+      if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+          if (input) input.value = '';
+          clearBtn.style.display = 'none';
+          placeRows.forEach(r => r.classList.remove('selected'));
+          if (routePolyline) map.removeLayer(routePolyline);
+          if (targetMarker) map.removeLayer(targetMarker);
+          map.setView(vehicleCoords, 13);
+          if (startBtn) {
+            startBtn.disabled = true;
+            startBtn.textContent = 'Select Destination to Calculate Route';
+          }
+        });
+      }
+
+      startBtn?.addEventListener('click', () => {
+        if (!startBtn.disabled) window.location.href = '/dashboard';
+      });
+    });
+  </script>
+</body>
+</html>

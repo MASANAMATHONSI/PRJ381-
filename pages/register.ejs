@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= typeof pageTitle !== 'undefined' ? pageTitle : 'Get Started - IWOS' %></title>
+  
+  
+  <link rel="stylesheet" href="/css.css" />
+</head>
+<body class="mobile-body">
+
+  <div class="mobile-screen auth-screen">
+    <!-- Header Title -->
+    <header class="auth-brand-block">
+      <div class="brand-logo-title">
+        <svg class="brand-bolt-icon" viewBox="0 0 24 24" fill="none" stroke="#7075f8" stroke-width="2.5">
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+        </svg>
+        <h1 class="brand-title-large">IWOS</h1>
+      </div>
+      <h2 class="screen-heading">Get Started</h2>
+      <p class="brand-tagline">Set up your sensor account and vehicle profile</p>
+    </header>
+
+    <!-- Registration Form -->
+    <form class="mobile-form" action="/register" method="POST">
+      <!-- Full Name Field -->
+      <div class="field-group">
+        <label for="fullName" class="input-label">Full Name</label>
+        <input 
+          type="text" 
+          id="fullName" 
+          name="fullName" 
+          class="mobile-input" 
+          placeholder="e.g. Eleanor Vance" 
+          value="<%= (typeof formData !== 'undefined' && formData.name) ? formData.name : '' %>"
+          required
+        />
+      </div>
+
+      <!-- Email Field -->
+      <div class="field-group">
+        <label for="email" class="input-label">Email Address</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          class="mobile-input" 
+          placeholder="driver@example.com" 
+          value="<%= (typeof formData !== 'undefined' && formData.email) ? formData.email : '' %>" 
+          required 
+        />
+      </div>
+
+      <!-- Password Field with Visibility Toggle & Strength Bar -->
+      <div class="field-group">
+        <label for="registerPassword" class="input-label">Choose Password</label>
+        <div class="input-action-wrapper">
+          <input 
+            type="password" 
+            id="registerPassword" 
+            name="password" 
+            class="mobile-input" 
+            placeholder="At least 8 characters"
+            value="<%= (typeof formData !== 'undefined' && formData.password) ? formData.password : '' %>" 
+            required 
+          />
+          <button type="button" class="field-action-btn" id="toggleRegPasswordBtn">Show</button>
+        </div>
+
+        <div class="password-meter-bars">
+          <span class="meter-bar active"></span>
+          <span class="meter-bar active"></span>
+          <span class="meter-bar active"></span>
+          <span class="meter-bar"></span>
+        </div>
+        <span class="password-strength-label text-success">Strong password</span>
+      </div>
+
+      <!-- Vehicle Nickname Field -->
+      <div class="field-group">
+        <label for="vehicleNickname" class="input-label">Vehicle Nickname (Optional)</label>
+        <input 
+          type="text" 
+          id="vehicleNickname" 
+          name="vehicleNickname" 
+          class="mobile-input" 
+          placeholder="e.g. Gray Sedan" 
+          value="<%= (typeof formData !== 'undefined' && formData.vehicleNickname) ? formData.vehicleNickname : '' %>"
+        />
+      </div>
+
+      <!-- Submit Action -->
+      <button type="submit" class="mobile-btn mobile-btn-primary">Create Account</button>
+    </form>
+
+    <!-- Bottom Navigation Switch -->
+    <footer class="auth-footer-prompt">
+      <span>Already have an account?</span>
+      <a href="/signup" class="text-link-highlight">Sign in</a>
+    </footer>
+  </div>
+
+  <script src="/js.js"></script>
+</body>
+</html>

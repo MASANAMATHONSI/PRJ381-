@@ -1020,3 +1020,354 @@ body.mobile-body {
 .text-link-highlight:hover {
   text-decoration: underline;
 }
+
+/* =========================================================
+   IWOS Mobile & Auth Screen Stylesheet (Dark Mode)
+   Unified Theme: #0e1218 / #151b24
+   ========================================================= */
+
+   * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  :root {
+    --bg-app: #0e1218;
+    --bg-card: #121720;
+    --bg-input: #151b24;
+    --border-color: #232d3d;
+    --border-focus: #7075f8;
+    --text-primary: #ffffff;
+    --text-muted: #8b98a9;
+    --text-dim: #5c6879;
+    --accent-purple: #5a57f4;
+    --accent-purple-hover: #4e4ae0;
+    --accent-green: #00e599;
+    --error-color: #ef4444;
+  }
+  
+  body.mobile-body {
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.25rem;
+  }
+  
+  /* Centered Mobile Screen Container */
+  .mobile-screen.auth-screen {
+    width: 100%;
+    max-width: 420px;
+    background-color: var(--bg-app);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 640px;
+    padding: 2.5rem 1.75rem 2rem 1.75rem;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  }
+  
+  /* Header & Branding */
+  .auth-brand-block {
+    margin-bottom: 1.75rem;
+  }
+  
+  .brand-logo-title {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .brand-bolt-icon {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .brand-title-large {
+    font-size: 1.85rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+  }
+  
+  .screen-heading {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+    margin-bottom: 0.35rem;
+  }
+  
+  .brand-tagline {
+    font-size: 0.92rem;
+    line-height: 1.45;
+    color: var(--text-muted);
+  }
+  
+  /* Form Layout */
+  .mobile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+    flex: 1;
+  }
+  
+  .field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+  
+  .input-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  
+  .mobile-input {
+    width: 100%;
+    background-color: var(--bg-input);
+    border: 1.5px solid var(--border-color);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    padding: 0.82rem 1rem;
+    border-radius: 10px;
+    outline: none;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+  
+  .mobile-input:focus {
+    border-color: var(--border-focus);
+  }
+  
+  .mobile-input::placeholder {
+    color: var(--text-dim);
+  }
+  
+  /* Action Field (Password with Show/Hide) */
+  .input-action-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .input-action-wrapper .mobile-input {
+    padding-right: 4.25rem;
+  }
+  
+  .input-action-wrapper.has-error .mobile-input {
+    border-color: var(--error-color);
+  }
+  
+  .field-action-btn {
+    position: absolute;
+    right: 0.9rem;
+    background: transparent;
+    border: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--border-focus);
+    cursor: pointer;
+    padding: 0.25rem 0.4rem;
+  }
+  
+  .field-action-btn:hover {
+    color: #9295ff;
+  }
+  
+  /* Password Strength Indicator */
+  .password-meter-bars {
+    display: flex;
+    gap: 6px;
+    margin-top: 0.4rem;
+  }
+  
+  .meter-bar {
+    flex: 1;
+    height: 3.5px;
+    background-color: var(--border-color);
+    border-radius: 2px;
+    transition: background-color 0.2s ease;
+  }
+  
+  .meter-bar.active {
+    background-color: var(--accent-green);
+  }
+  
+  .password-strength-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    margin-top: 0.2rem;
+  }
+  
+  .text-success {
+    color: var(--accent-green);
+  }
+  
+  .field-error-text {
+    font-size: 0.8rem;
+    color: var(--error-color);
+    margin-top: 0.2rem;
+  }
+  
+  /* Primary Button */
+  .mobile-btn {
+    width: 100%;
+    padding: 0.95rem;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.15s ease, transform 0.05s ease;
+    margin-top: 0.5rem;
+  }
+  
+  .mobile-btn-primary {
+    background-color: var(--accent-purple);
+    color: #ffffff;
+  }
+  
+  .mobile-btn-primary:hover {
+    background-color: var(--accent-purple-hover);
+  }
+  
+  .mobile-btn-primary:active {
+    transform: scale(0.99);
+  }
+  
+  /* Footer Prompt & Switch Links */
+  .auth-footer-prompt {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin-top: 1.75rem;
+  }
+  
+  .text-link-highlight {
+    color: var(--border-focus);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  
+  .text-link-highlight:hover {
+    text-decoration: underline;
+  }
+
+  /* Route Setup Screen Styles */
+/* Route Setup Screen Styles */
+.map-screen-wrapper {
+  overflow: hidden;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.map-top-overlay {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  right: 1rem;
+  z-index: 20;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.map-back-btn {
+  width: 40px;
+  height: 40px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.map-back-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.telemetry-pill-mini {
+  background-color: rgba(18, 23, 32, 0.9);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: #8b98a9;
+  backdrop-filter: blur(8px);
+}
+
+.location-sublabel {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--text-dim);
+  letter-spacing: 0.06em;
+}
+
+.sensor-tag {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #00e599;
+}
+
+.sensor-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #00e599;
+  box-shadow: 0 0 6px rgba(0, 229, 153, 0.8);
+}
+
+.clear-search-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0 0.3rem;
+}
+
+.place-row {
+  cursor: pointer;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  transition: background-color 0.15s ease;
+}
+
+.place-row:hover, .place-row.selected {
+  background-color: var(--bg-input);
+}
+
+.place-row.selected {
+  border: 1px solid var(--border-focus);
+}
+
+.mobile-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
