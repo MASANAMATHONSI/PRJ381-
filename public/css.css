@@ -811,3 +811,212 @@ body {
   color: #94a3b8;
   border: 1px solid #28313e;
 }
+
+/* Base Reset & Mobile Screen Layout */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+  --bg-app: #0e1218;
+  --bg-input: #151b24;
+  --border-color: #232d3d;
+  --border-focus: #7075f8;
+  --text-primary: #ffffff;
+  --text-muted: #8b98a9;
+  --accent-purple: #5a57f4;
+  --accent-purple-hover: #4e4ae0;
+  --error-color: #ef4444;
+}
+
+body.mobile-body {
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.mobile-screen.auth-screen {
+  width: 100%;
+  max-width: 420px;
+  background-color: var(--bg-app);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 580px;
+  padding: 2.5rem 1.5rem 1.5rem 1.5rem;
+}
+
+/* Brand Header */
+.auth-brand-block {
+  margin-bottom: 2rem;
+}
+
+.brand-logo-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+
+.brand-bolt-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.brand-title-large {
+  font-size: 1.85rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.brand-tagline {
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+/* Form Fields */
+.mobile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  flex: 1;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.input-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.mobile-input {
+  width: 100%;
+  background-color: var(--bg-input);
+  border: 1.5px solid var(--border-color);
+  color: var(--text-primary);
+  font-size: 0.98rem;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.mobile-input:focus {
+  border-color: var(--border-focus);
+}
+
+.mobile-input::placeholder {
+  color: #5c6879;
+}
+
+/* Input Wrapper & Password Show Button */
+.input-action-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-action-wrapper .mobile-input {
+  padding-right: 4.25rem;
+}
+
+.input-action-wrapper.has-error .mobile-input {
+  border-color: var(--error-color);
+}
+
+.field-action-btn {
+  position: absolute;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--border-focus);
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.field-action-btn:hover {
+  color: #9295ff;
+}
+
+.field-error-text {
+  font-size: 0.8rem;
+  color: var(--error-color);
+  margin-top: 0.2rem;
+}
+
+/* Auxiliary Links & Submit Button */
+.form-auxiliary-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -0.35rem;
+  margin-bottom: 0.5rem;
+}
+
+.text-link-subtle {
+  font-size: 0.85rem;
+  color: var(--border-focus);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.text-link-subtle:hover {
+  text-decoration: underline;
+}
+
+.mobile-btn {
+  width: 100%;
+  padding: 0.95rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.15s ease;
+}
+
+.mobile-btn-primary {
+  background-color: var(--accent-purple);
+  color: #ffffff;
+}
+
+.mobile-btn-primary:hover {
+  background-color: var(--accent-purple-hover);
+}
+
+/* Bottom Registration Prompt */
+.auth-footer-prompt {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin-top: 2rem;
+}
+
+.text-link-highlight {
+  color: var(--border-focus);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.text-link-highlight:hover {
+  text-decoration: underline;
+}

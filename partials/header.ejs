@@ -1,6 +1,18 @@
+<% 
+  const currentBattery = typeof batteryLevel !== 'undefined' ? Number(batteryLevel) : 87;
+  const batteryPercent = Math.min(Math.max(currentBattery, 0), 100);
+
+  let batteryColorClass = 'battery-green';
+  if (currentBattery <= 20) {
+    batteryColorClass = 'battery-red';
+  } else if (currentBattery <= 50) {
+    batteryColorClass = 'battery-amber';
+  }
+%>
+
 <link rel="stylesheet" href="/css.css" />
 
-
+<!-- Top Navigation Bar -->
 <header class="iwos-topbar">
   <button type="button" id="menuToggle" class="nav-btn" aria-label="Open Navigation">
     <span class="hamburger-line"></span>
@@ -21,7 +33,7 @@
 
 <div id="drawerOverlay" class="drawer-overlay"></div>
 
-
+<!-- Sidebar Drawer -->
 <aside id="sidebarDrawer" class="sidebar-drawer">
   <div class="drawer-header">
     <div class="brand-badge-row">
@@ -32,6 +44,7 @@
   </div>
 
   <nav class="sidebar-nav" aria-label="Main Navigation">
+    <!-- 1. Dashboard -->
     <a 
       href="/dashboard" 
       class="nav-link <%= (typeof activePage !== 'undefined' && activePage === 'dashboard') ? 'active' : '' %>"
@@ -42,6 +55,7 @@
       <span>Live Status</span>
     </a>
 
+    <!-- 2. Sync & Sessions -->
     <a 
       href="/sync-sessions" 
       class="nav-link <%= (typeof activePage !== 'undefined' && activePage === 'sync') ? 'active' : '' %>"
@@ -51,20 +65,66 @@
       </svg>
       <span>Sync &amp; Logs</span>
     </a>
+
+    <!-- 3. Route Set Up -->
+    <a 
+      href="/route-setup" 
+      class="nav-link <%= (typeof activePage !== 'undefined' && activePage === 'route-setup') ? 'active' : '' %>"
+    >
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
+      </svg>
+      <span>Route Setup</span>
+    </a>
+
+    <!-- 4. Register -->
+    <a 
+      href="/register" 
+      class="nav-link <%= (typeof activePage !== 'undefined' && activePage === 'register') ? 'active' : '' %>"
+    >
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+        <circle cx="8.5" cy="7" r="4"></circle>
+        <line x1="20" y1="8" x2="20" y2="14"></line>
+        <line x1="23" y1="11" x2="17" y2="11"></line>
+      </svg>
+      <span>Register</span>
+    </a>
+
+    <!-- 5. Sign Up -->
+    <a 
+      href="/signup" 
+      class="nav-link <%= (typeof activePage !== 'undefined' && activePage === 'signup') ? 'active' : '' %>"
+    >
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+        <polyline points="10 17 15 12 10 7"></polyline>
+        <line x1="15" y1="12" x2="3" y2="12"></line>
+      </svg>
+      <span>Sign Up</span>
+    </a>
   </nav>
 
+  <!-- Responsive Battery Footer Card -->
   <div class="sidebar-footer-card">
     <div class="card-top-row">
       <div class="vehicle-identity">
         <strong class="vehicle-code">IWOS-07</strong>
         <span class="lead-pill">LEAD</span>
       </div>
-      <div class="battery-metric">
-        <svg class="battery-icon" viewBox="0 0 24 24" fill="none" stroke="#00e599" stroke-width="2">
-          <rect x="2" y="7" width="16" height="10" rx="2" ry="2"></rect>
-          <line x1="22" y1="11" x2="22" y2="13"></line>
-        </svg>
-        <span class="battery-value">87%</span>
+
+      <div id="batteryWidget" class="battery-metric <%= batteryColorClass %>">
+        <div class="battery-meter" title="<%= batteryPercent %>%">
+          <div class="battery-meter-body">
+            <div 
+              id="batteryFillBar" 
+              class="battery-meter-fill" 
+              data-percent="<%= batteryPercent %>"
+            ></div>
+          </div>
+          <div class="battery-meter-nipple"></div>
+        </div>
+        <span id="batteryValueText" class="battery-value"><%= currentBattery %>%</span>
       </div>
     </div>
     

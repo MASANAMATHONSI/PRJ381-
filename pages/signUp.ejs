@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= typeof pageTitle !== 'undefined' ? pageTitle : 'Sign In - IWOS' %></title>
+  <link rel="stylesheet" href="/css.css" />
+</head>
+<body class="mobile-body">
+
+  <div class="mobile-screen auth-screen">
+    <!-- Brand Header -->
+    <header class="auth-brand-block">
+      <div class="brand-logo-title">
+        <svg class="brand-bolt-icon" viewBox="0 0 24 24" fill="none" stroke="#7075f8" stroke-width="2.5">
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+        </svg>
+        <h1 class="brand-title-large">IWOS</h1>
+      </div>
+      <p class="brand-tagline">
+        Real weather from vehicle sensors where you are. Preparation for everyday drivers.
+      </p>
+    </header>
+
+    <!-- Sign In / Sign Up Entry Form -->
+    <form class="mobile-form" action="/signup" method="POST">
+      <!-- Email Address Field -->
+      <div class="field-group">
+        <label for="email" class="input-label">Email Address</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          class="mobile-input" 
+          value="<%= typeof email !== 'undefined' ? email : '' %>" 
+          placeholder="driver@iwos.org" 
+          required 
+        />
+      </div>
+
+      <!-- Password Field with Show/Hide Action -->
+      <div class="field-group">
+        <label for="password" class="input-label">Password</label>
+        <div class="input-action-wrapper <%= (typeof errorMessage !== 'undefined' && errorMessage) ? 'has-error' : '' %>">
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            class="mobile-input" 
+            value="••••••••••••" 
+            required 
+          />
+          <button type="button" class="field-action-btn" id="togglePasswordBtn">Show</button>
+        </div>
+        
+        <!-- Error Message Display -->
+        <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+          <span class="field-error-text"><%= errorMessage %></span>
+        <% } %>
+      </div>
+
+      <!-- Auxiliary Password Action -->
+      <div class="form-auxiliary-row">
+        <a href="#" class="text-link-subtle">Forgot password?</a>
+      </div>
+
+      <!-- Submit Action -->
+      <button type="submit" class="mobile-btn mobile-btn-primary">Sign In</button>
+    </form>
+
+    <!-- Bottom Switch Link to Register Screen -->
+    <footer class="auth-footer-prompt">
+      <span>New to IWOS?</span>
+      <a href="/register" class="text-link-highlight">Create an account</a>
+    </footer>
+  </div>
+
+  <script>
+    // Password visibility toggle handler
+    const passwordInput = document.getElementById('password');
+    const toggleButton = document.getElementById('togglePasswordBtn');
+
+    if (toggleButton && passwordInput) {
+      toggleButton.addEventListener('click', () => {
+        const isPassword = passwordInput.type === 'password';
+        passwordInput.type = isPassword ? 'text' : 'password';
+        toggleButton.textContent = isPassword ? 'Hide' : 'Show';
+      });
+    }
+  </script>
+</body>
+</html>
